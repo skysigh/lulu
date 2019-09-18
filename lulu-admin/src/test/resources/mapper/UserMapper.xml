@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.skysigh.lulu.admin.dao.UserDao">
+
+	<select id="getUserById" resultType="org.skysigh.lulu.admin.po.User">
+		select * from user_t where
+		id=#{id}
+	</select>
+	
+	<insert id="add" parameterType="org.skysigh.lulu.admin.po.User">
+		INSERT INTO user_t (account, password) VALUES (#{account}, #{password});
+	</insert>
+
+</mapper>
