@@ -2,17 +2,17 @@ package org.skysigh.lulu.admin.po;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User implements Serializable , Cloneable{
 
 	private static final long serialVersionUID = 1L;
 
 	private long id;
-	private String account;
+	private String username;
 	private String password;
 	public User() {
 	}
-	public User(String account, String password) {
-		this.account = account;
+	public User(String username, String password) {
+		this.username = username;
 		this.password = password;
 	}
 
@@ -24,12 +24,12 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public String getAccount() {
-		return account;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setAccount(String account) {
-		this.account = account;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
@@ -41,8 +41,17 @@ public class User implements Serializable {
 	}
 
 	@Override
+	public User clone() {
+		User user = null;
+		try {
+			user = (User) super.clone();
+		} catch (CloneNotSupportedException e) {
+		}
+		return user;
+	}
+	@Override
 	public String toString() {
-		return "User [id=" + id + ", account=" + account + ", password=" + password + "]";
+		return "User [id=" + id + ", account=" + username + ", password=" + password + "]";
 	}
 
 }

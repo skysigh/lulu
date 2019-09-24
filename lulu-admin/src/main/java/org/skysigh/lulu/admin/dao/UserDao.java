@@ -12,4 +12,5 @@ public interface UserDao {
 
 	void delete(long[] userIds);
 
+	User findUserByAccount(String account);
 }

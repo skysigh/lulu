@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.skysigh.lulu.admin.dao.SpecificationOptionDao">
+	<resultMap type="specificationOption" id="specificationOption">
+		<id property="id" column="id" />
+	</resultMap>
+
+	<sql id="selectFrom">
+		select * from tb_specification_option
+	</sql>
+
+	<select id="getAll" resultMap="specificationOption">
+		<include refid="selectFrom"></include>
+	</select>
+	<select id="getById" resultMap="specificationOption">
+		<include refid="selectFrom"></include>
+		where id=#{id}
+	</select>
+
+	<insert id="add" parameterType="specificationOption">
+		insert into
+		tb_specification_option
+		(option_name, spec_id, orders) values
+		(#{optionName},#{specId},#{orders})
+	</insert>
+	<insert id="update" parameterType="specificationOption">
+		update tb_specification_option
+		set
+		option_name=#{optionName}
+		spec_id=#{specId}
+		orders=#{orders}
+		where
+		id=#{id}
+	</insert>
+
+	<delete id="delete">
+		delete from tb_specification_option where id in
+		<foreach collection="array" item="item" index="index" open="("
+			close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+
+	<select id="getSpeOption" resultMap="specificationOption">
+		<include refid="selectFrom"></include>
+		where spec_id=#{id}
+	</select>
+
+	<delete id="deleteBySpecId">
+		delete from tb_specification_option where spec_id in
+		<foreach collection="array" item="item" index="index" open="("
+			close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+
+
+</mapper>

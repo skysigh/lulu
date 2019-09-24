@@ -15,6 +15,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
+import com.alibaba.fastjson.JSON;
+
 public class BaseServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -49,12 +51,31 @@ public class BaseServlet extends HttpServlet {
 	}
 
 	String getParam(String key, HttpServletRequest request) throws UnsupportedEncodingException {
-		request.setCharacterEncoding("UTF-8");
 		String parameter = request.getParameter(key);
-		if (parameter == null) {
-			return null;
+		return parameter;
+		// if (parameter == null) {
+		// return null;
+		// }
+		// return new String(parameter.getBytes("ISO8859-1"), "UTF-8");
+	}
+
+	void checkParamNull(String param) {
+		if (param == null || "".equals(param)) {
+			throw new IllegalArgumentException();
 		}
-		return new String(parameter.getBytes("ISO8859-1"), "UTF-8");
+	}
+
+	protected <T> String getJsonString(T t) {
+		if (t == null) {
+			return "{}";
+		}
+		return JSON.toJSONString(t);
+	}
+
+	protected <T> void writeJsonToResp(HttpServletResponse resp, T t) throws IOException {
+		String jsonString = getJsonString(t);
+		resp.setContentType("text/html;charset=UTF-8");
+		resp.getWriter().print(jsonString);
 	}
 
 }

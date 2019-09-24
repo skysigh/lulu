@@ -2,22 +2,21 @@ package org.skysigh.lulu.admin.dao.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.skysigh.lulu.admin.dao.UserDao;
-import org.skysigh.lulu.admin.po.User;
+import org.skysigh.lulu.admin.dao.SpecificationDao;
+import org.skysigh.lulu.admin.po.Specification;
 
-public class UserDaoTest {
-	
-	private UserDao userDao;
+public class SpecificationDaoTest {
+	private SpecificationDao specificationDao;
 	private SqlSession session;
-	
+
 	@Before
 	public void setUp() throws IOException {
 		String resource = "mybatis-config.xml";
@@ -25,26 +24,11 @@ public class UserDaoTest {
 		SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
 		SqlSessionFactory factory = builder.build(in);
 		session = factory.openSession();
-		userDao = session.getMapper(UserDao.class);
-		//userDao = new UserDaoImpl();
-		//userDao.setSqlSession(session);
+		specificationDao = session.getMapper(SpecificationDao.class);
 	}
-	
 	@Test
-	public void getUserById_test() {
-		long id = 1L;
-		User user = userDao.getUserById(id);
-		if(user != null) {
-			long actualId = user.getId();
-			Assert.assertEquals(id, actualId);
-		}
+	public void getAll_test() throws IOException {
+		List<Specification> all = specificationDao.getAll();
+		System.out.println(all);
 	}
-	
-	@Test
-	public void add_test() {
-		User user = new User("hf", "123456");
-		userDao.add(user);
-		session.commit();
-	}
-
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.skysigh.lulu.admin.dao.SpecificationDao">
+	<resultMap type="specification" id="specification">
+		<id property="id" column="id" />
+	</resultMap>
+
+	<sql id="selectFrom">
+		select * from tb_specification
+	</sql>
+
+	<select id="getAll" resultMap="specification">
+		<include refid="selectFrom"></include>
+	</select>
+	<select id="getById" resultMap="specification">
+		<include refid="selectFrom"></include>
+		where id=#{id}
+	</select>
+
+	<insert id="add" parameterType="specification" useGeneratedKeys="true"
+		keyProperty="id" keyColumn="id">
+		insert into tb_specification
+		(spec_name)
+		values (#{specName})
+	</insert>
+	<insert id="update" parameterType="specification">
+		update tb_specification set
+		spec_name=#{specName}
+		where id=#{id}
+	</insert>
+
+	<delete id="delete">
+		delete from tb_specification where id in
+		<foreach collection="array" item="item" index="index" open="("
+			close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+
+
+
+</mapper>

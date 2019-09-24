@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>规格管理</title>
+
+<link rel="stylesheet" type="text/css"
+	href="../../plugin/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet"
+	href="../../plugin/bootstrap/css/bootstrap-tree-view.css" />
+<link rel="stylesheet"
+	href="../../plugin/bootstrap/css/bootstrap-table.min.css" />
+
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+	integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
+	crossorigin="anonymous">
+</head>
+<body>
+	<div id="specification_app">
+		<div id="specification_tool">
+			<div class="btn-group" role="group" aria-label="...">
+				<button type="button" class="btn btn-default"
+					@click="specification_openAddModal()">添加</button>
+				<button type="button" class="btn btn-default"
+					@click="specification_openEditModal()">编辑</button>
+				<button type="button" class="btn btn-default"
+					@click="specification_delete()">删除</button>
+			</div>
+		</div>
+		<table id="specification_table"></table>
+
+		<!-- Modal -->
+		<div class="modal fade" id="specification_addModal" tabindex="-1"
+			role="dialog" aria-labelledby="specification_addModal">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title">{{specification_addOrEditTitle}}</h4>
+					</div>
+					<div class="modal-body">
+
+						<div class="container-fluid">
+							<div class="row">
+								<input type="hidden" v-model="specification.id">
+								<label for="specification_name" class="col-md-4">规格名称</label>
+								<div class="col-md-8">
+									<input id="specification_name" class="form-control"
+										v-model="specification.specName">
+								</div>
+							</div>
+
+							<div class="row">
+								<button class="btn btn-default" @click="addNewSpecOption()">新增规格选项</button>
+							</div>
+
+							<div class="row">
+								<div class="col-md=-12">
+									<table class="table">
+										<thead>
+											<tr>
+												<th>规格选项</th>
+												<th>排序</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+
+										<tbody>
+											<tr v-for="speOption in speOptionList">
+												<td><input class="form-control"
+													v-model="speOption.optionName"></td>
+												<td><input class="form-control"
+													v-model="speOption.orders"></td>
+												<td><button class="btn btn-default"
+														@click="delSpeOption(speOption)">删除</button></td>
+											</tr>
+										</tbody>
+									</table>
+
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary"
+							@click="specification_addOrEdit()">确定</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+	<script type="text/javascript" src="../../plugin/jquery-3.4.1.js"></script>
+
+	<!-- bootstrap -->
+	<script type="text/javascript"
+		src="../../plugin/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript"
+		src="../../plugin/bootstrap/js/bootstrap-treeview.min.js"></script>
+	<script type="text/javascript"
+		src="../../plugin/bootstrap/js/bootstrap-table.min.js"></script>
+	<script type="text/javascript"
+		src="../../plugin/bootstrap/js/bootstrap-hover-dropdown.min.js"></script>
+	<script type="text/javascript"
+		src="../../plugin/bootstrap/js/bootstrap-table-resizable.js"></script>
+	<script type="text/javascript"
+		src="../../plugin/bootstrap/js/bootstrap-table-zh-CN.min.js"></script>
+	<script type="text/javascript"
+		src="../../plugin/bootstrap/js/bootstrap-select.min.js"></script>
+	<script type="text/javascript"
+		src="../../plugin/bootstrap/js/messenger.js"></script>
+	<script type="text/javascript"
+		src="../../plugin/bootstrap/js/colResizable-1.6.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script type="text/javascript" src="../../custom/js/common.js"></script>
+	<script type="text/javascript"
+		src="../../custom/js/page/specification/specification.js"></script>
+
+</body>
+</html>

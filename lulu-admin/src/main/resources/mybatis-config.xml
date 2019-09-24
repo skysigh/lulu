@@ -5,7 +5,7 @@
 	<properties>
 		<property name="driver" value="com.mysql.jdbc.Driver" />
 		<property name="url"
-			value="jdbc:mysql://localhost:3306/lulu?characterEncoding=utf8&amp;useSSL=false" />
+			value="jdbc:mysql://localhost:3306/tmall?characterEncoding=utf8&amp;useSSL=false" />
 																
 		<property name="username" value="root" />
 		<property name="password" value="123456" />
@@ -15,6 +15,10 @@
 		<setting name="mapUnderscoreToCamelCase" value="true" />
 		<setting name="logImpl" value="LOG4J" />
 	</settings>
+	
+	<typeAliases>
+		<package name="org.skysigh.lulu.admin.po" />
+	</typeAliases>
 
 	<environments default="test">
 		<environment id="test">
@@ -40,6 +44,10 @@
 
 	<mappers>
 		<mapper resource="mapper/UserMapper.xml" />
+		<mapper resource="mapper/Brand.xml" />
+		<mapper resource="mapper/SpecificationMapper.xml" />
+		<mapper resource="mapper/SpecificationOptionMapper.xml" />
+		<mapper resource="mapper/TypeTemplate.xml" />
 	</mappers>
 
 

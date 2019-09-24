@@ -23,11 +23,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void setSqlSession(SqlSession sqlSession) {
-		
-	}
-
-	@Override
 	public void add(User user) {
 		userDao.add(user);
 		sqlSession.commit();
@@ -37,6 +32,20 @@ public class UserServiceImpl implements UserService {
 	public void delete(long[] userIds) {
 		userDao.delete(userIds);
 		sqlSession.commit();
+	}
+
+	@Override
+	public User checkUser(String account, String password) {
+		User user = userDao.findUserByAccount(account);
+		if(user == null) {
+			return null;
+		}
+		User clone = user.clone();
+		if(password.equals(clone.getPassword())) {
+			clone.setPassword("");
+			return clone;
+		}
+		return null;
 	}
 
 }
