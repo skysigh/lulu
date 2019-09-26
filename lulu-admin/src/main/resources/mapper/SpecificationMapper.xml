@@ -38,6 +38,26 @@
 		</foreach>
 	</delete>
 
+	<select id="query" resultType="specification"
+		parameterType="org.skysigh.lulu.admin.result.QueryParam">
+		SELECT *
+		FROM tb_specification
+		<if test="search != null and search != ''">
+			WHERE spec_name LIKE '%${search}%'
+		</if>
+		<if test="sort != null and sort == 'id'">
+			ORDER BY id ${order}
+		</if>
+		<if test="sort != null and sort == 'specName'">
+			ORDER BY specName ${order}
+		</if>
+		LIMIT #{offset}, #{limit}
+	</select>
+
+	<select id="count" resultType="int">
+		select count(*) from
+		tb_specification;
+	</select>
 
 
 </mapper>

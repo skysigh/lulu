@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.skysigh.lulu.admin.po.Specification;
+import org.skysigh.lulu.admin.result.QueryParam;
+import org.skysigh.lulu.admin.result.QueryResult;
 import org.skysigh.lulu.admin.result.ResultModel;
 import org.skysigh.lulu.admin.service.SpecificationService;
 import org.skysigh.lulu.admin.service.impl.SpecificationServiceImpl;
@@ -26,16 +28,6 @@ public class SpecificationController extends BaseServlet {
 	@Override
 	public void init() throws ServletException {
 		specificationService = new SpecificationServiceImpl(BaseServlet.session);
-	}
-
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		handleUri(req, resp);
-	}
-
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doGet(req, resp);
 	}
 
 	private void getById(HttpServletRequest request, HttpServletResponse response)
@@ -67,7 +59,6 @@ public class SpecificationController extends BaseServlet {
 
 		String specVoStr = getParam("specVoStr", request);
 		checkParamNull(specVoStr);
-		
 
 		SpecificationVo parseObject = JSON.parseObject(specVoStr, SpecificationVo.class);
 		ResultModel rm = new ResultModel();
@@ -87,7 +78,6 @@ public class SpecificationController extends BaseServlet {
 
 		String specVoStr = getParam("specVoStr", request);
 		checkParamNull(specVoStr);
-		
 
 		SpecificationVo parseObject = JSON.parseObject(specVoStr, SpecificationVo.class);
 		ResultModel rm = new ResultModel();
@@ -122,8 +112,9 @@ public class SpecificationController extends BaseServlet {
 		}
 		writeJsonToResp(response, rm);
 	}
-	
-	private void getSpeOption(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+
+	private void getSpeOption(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String id = getParam("id", request);
 		checkParamNull(id);
 		ResultModel rm = new ResultModel();
@@ -131,13 +122,9 @@ public class SpecificationController extends BaseServlet {
 		writeJsonToResp(response, rm);
 	}
 
-	// ∑÷∑¢«Î«Û
-	private void handleUri(HttpServletRequest request, HttpServletResponse response)
+	@Override
+	protected void handleUri(String method, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String uri = request.getRequestURI();
-		String[] split = uri.split("/");
-		String method = split[split.length - 1];
-
 		switch (method) {
 		case "getSpecificationById.do":
 			getById(request, response);
@@ -157,9 +144,29 @@ public class SpecificationController extends BaseServlet {
 		case "getSpeOption.do":
 			getSpeOption(request, response);
 			break;
+		case "querySpecification.do":
+			query(request, response);
+			break;
 		default:
 			throw new RuntimeException("Œ¥’“µΩ404");
 		}
+	}
+
+	// asc…˝–Ú descΩµ–Ú
+	private void query(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String search = getParam("search", request);
+		String sort = getParam("sort", request);
+		String order = getParam("order", request);
+		String offset = getParam("offset", request);
+		checkParamNull(offset);
+		String limit = getParam("limit", request);
+		checkParamNull(limit);
+		QueryParam queryParam = new QueryParam(search, sort, order, Integer.parseInt(offset), Integer.parseInt(limit));
+		System.err.println(queryParam);
+		QueryResult<Specification> query = specificationService.query(queryParam);
+		ResultModel rm = new ResultModel();
+		rm.setData(query);
+		writeJsonToResp(response, rm);
 	}
 
 }

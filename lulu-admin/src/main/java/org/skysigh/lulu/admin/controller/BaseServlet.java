@@ -38,6 +38,29 @@ public class BaseServlet extends HttpServlet {
 		}
 	}
 
+	protected void handleUri(String method, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		throw new RuntimeException("Œ¥’“µΩ");
+	}
+
+	private void handleUri(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String uri = request.getRequestURI();
+		String[] split = uri.split("/");
+		String method = split[split.length - 1];
+		handleUri(method, request, response);
+	}
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		handleUri(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		doGet(req, resp);
+	}
+
 	@Override
 	public void destroy() {
 		super.destroy();
@@ -52,11 +75,10 @@ public class BaseServlet extends HttpServlet {
 
 	String getParam(String key, HttpServletRequest request) throws UnsupportedEncodingException {
 		String parameter = request.getParameter(key);
-		return parameter;
-		// if (parameter == null) {
-		// return null;
-		// }
-		// return new String(parameter.getBytes("ISO8859-1"), "UTF-8");
+		if (parameter == null) {
+			return null;
+		}
+		return new String(parameter.getBytes("ISO8859-1"), "UTF-8");
 	}
 
 	void checkParamNull(String param) {

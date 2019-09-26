@@ -22,14 +22,16 @@
 	<insert id="add" parameterType="typeTemplate">
 		insert into
 		tb_type_template
-		(spec_ids, brand_ids, custom_attribute_items) values (#{specIds},
+		(name, spec_ids, brand_ids, custom_attribute_items) values
+		(#{name},#{specIds},
 		#{brandIds}, #{customAttributeItems})
 	</insert>
 	<insert id="update" parameterType="typeTemplate">
 		update tb_type_template
 		set
-		spec_ids=#{specIds}
-		brand_ids=#{brandIds}
+		name=#{name},
+		spec_ids=#{specIds},
+		brand_ids=#{brandIds},
 		custom_attribute_items=#{customAttributeItems}
 		where id=#{id}
 	</insert>
@@ -41,4 +43,28 @@
 			#{item}
 		</foreach>
 	</delete>
+
+	<select id="query" resultMap="typeTemplate"
+		parameterType="org.skysigh.lulu.admin.result.QueryParam">
+		SELECT *
+		FROM tb_type_template
+		<if test="search != null and search != ''">
+			WHERE name LIKE '%${search}%' or spec_ids LIKE
+			'%${search}%'
+			or brand_ids LIKE '%${search}%'
+			or custom_attribute_items LIKE '%${search}%'
+		</if>
+		<if test="sort != null and sort == 'id'">
+			ORDER BY id ${order}
+		</if>
+		<if test="sort != null and sort == 'name'">
+			ORDER BY name ${order}
+		</if>
+		LIMIT #{offset}, #{limit}
+	</select>
+
+	<select id="count" resultType="int">
+		select count(*) from
+		tb_type_template;
+	</select>
 </mapper>

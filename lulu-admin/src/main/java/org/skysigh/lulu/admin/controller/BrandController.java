@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.skysigh.lulu.admin.po.Brand;
+import org.skysigh.lulu.admin.result.QueryParam;
+import org.skysigh.lulu.admin.result.QueryResult;
 import org.skysigh.lulu.admin.result.ResultModel;
 import org.skysigh.lulu.admin.service.BrandService;
 import org.skysigh.lulu.admin.service.impl.BrandServiceImpl;
@@ -23,16 +25,6 @@ public class BrandController extends BaseServlet {
 	@Override
 	public void init() throws ServletException {
 		brandService = new BrandServiceImpl(BaseServlet.session);
-	}
-
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		handleUri(req, resp);
-	}
-
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doGet(req, resp);
 	}
 
 	private void getBrandById(HttpServletRequest request, HttpServletResponse response)
@@ -126,13 +118,9 @@ public class BrandController extends BaseServlet {
 		writeJsonToResp(response, rm);
 	}
 
-	// 分发请求
-	private void handleUri(HttpServletRequest request, HttpServletResponse response)
+	@Override
+	protected void handleUri(String method, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String uri = request.getRequestURI();
-		String[] split = uri.split("/");
-		String method = split[split.length - 1];
-
 		switch (method) {
 		case "getBrandById.do":
 			getBrandById(request, response);
@@ -149,9 +137,26 @@ public class BrandController extends BaseServlet {
 		case "deleteBrand.do":
 			deleteBrand(request, response);
 			break;
+		case "queryBrand.do":
+			query(request, response);
+			break;
 		default:
 			throw new RuntimeException("未找到404");
 		}
 	}
-
+	private void query(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String search = getParam("search", request);
+		String sort = getParam("sort", request);
+		String order = getParam("order", request);
+		String offset = getParam("offset", request);
+		checkParamNull(offset);
+		String limit = getParam("limit", request);
+		checkParamNull(limit);
+		QueryParam queryParam = new QueryParam(search, sort, order, Integer.parseInt(offset), Integer.parseInt(limit));
+		System.err.println(queryParam);
+		QueryResult<Brand> query = brandService.query(queryParam);
+		ResultModel rm = new ResultModel();
+		rm.setData(query);
+		writeJsonToResp(response, rm);
+	}
 }

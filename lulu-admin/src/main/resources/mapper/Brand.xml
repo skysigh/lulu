@@ -35,5 +35,30 @@
 			#{item}
 		</foreach>
 	</delete>
+	
+	<select id="query" resultMap="brand"
+		parameterType="org.skysigh.lulu.admin.result.QueryParam">
+		SELECT *
+		FROM tb_brand
+		<if test="search != null and search != ''">
+			WHERE name LIKE '%${search}%' or first_char LIKE '%${search}%'
+		</if>
+		<if test="sort != null and sort == 'id'">
+			ORDER BY id ${order}
+		</if>
+		<if test="sort != null and sort == 'name'">
+			ORDER BY name ${order}
+		</if>
+		<if test="sort != null and sort == 'firstChar'">
+			ORDER BY first_char ${order}
+		</if>
+		LIMIT #{offset}, #{limit}
+	</select>
+
+	<select id="count" resultType="int">
+		select count(*) from
+		tb_brand;
+	</select>
+	
 
 </mapper>

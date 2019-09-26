@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.skysigh.lulu.admin.po.Specification;
 import org.skysigh.lulu.admin.po.SpecificationOption;
+import org.skysigh.lulu.admin.result.QueryParam;
+import org.skysigh.lulu.admin.result.QueryResult;
 import org.skysigh.lulu.admin.vo.SpecificationVo;
 
 public interface SpecificationService extends SqlService {
@@ -21,4 +23,6 @@ public interface SpecificationService extends SqlService {
 
 	void add(SpecificationVo specificationVo);
 	void update(SpecificationVo specificationVo);
+
+	QueryResult<Specification> query(QueryParam queryParam);
 }

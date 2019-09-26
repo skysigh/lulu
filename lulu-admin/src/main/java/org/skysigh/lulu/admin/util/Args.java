@@ -63,7 +63,6 @@ public class Args {
 	}
 	
 	private void parseArgumentStrings(List<String> argList) {
-		ListIterator<String> listIterator = argList.listIterator();
 		for(currentArgument = argList.listIterator();currentArgument.hasNext();) {
 			String argString = currentArgument.next();
 			if(argString.startsWith("-")) {
@@ -126,7 +125,6 @@ public class Args {
 	}
 	
 	public static void main(String[] args) {
-		Args arg = new Args("l,p#,d*", args);
 	}
 
 }

@@ -8,13 +8,15 @@ import org.skysigh.lulu.admin.dao.SpecificationDao;
 import org.skysigh.lulu.admin.dao.SpecificationOptionDao;
 import org.skysigh.lulu.admin.po.Specification;
 import org.skysigh.lulu.admin.po.SpecificationOption;
+import org.skysigh.lulu.admin.result.QueryParam;
+import org.skysigh.lulu.admin.result.QueryResult;
 import org.skysigh.lulu.admin.service.SpecificationService;
 import org.skysigh.lulu.admin.vo.SpecificationVo;
 
 public class SpecificationServiceImpl implements SpecificationService {
 	private SqlSession sqlSession;
 	private SpecificationDao specificationDao;
-	
+
 	private SpecificationOptionDao specificationOptionDao;
 
 	public SpecificationServiceImpl(SqlSession sqlSession) {
@@ -55,7 +57,8 @@ public class SpecificationServiceImpl implements SpecificationService {
 	@Override
 	public List<SpecificationOption> getSpeOption(long id) {
 		List<SpecificationOption> speOption = specificationOptionDao.getSpeOption(id);
-		if(speOption == null) return Collections.emptyList();
+		if (speOption == null)
+			return Collections.emptyList();
 		return speOption;
 	}
 
@@ -71,18 +74,28 @@ public class SpecificationServiceImpl implements SpecificationService {
 		}
 		sqlSession.commit();
 	}
-	
+
 	public void update(SpecificationVo specificationVo) {
 		Specification spec = specificationVo.getSpec();
 		List<SpecificationOption> specOptions = specificationVo.getSpecOptions();
 		specificationDao.update(spec);
-		specificationOptionDao.deleteBySpecId(new long[]{spec.getId()});
+		specificationOptionDao.deleteBySpecId(new long[] { spec.getId() });
 		long id = spec.getId();
 		for (SpecificationOption specificationOption : specOptions) {
 			specificationOption.setSpecId(id);
 			specificationOptionDao.add(specificationOption);
 		}
 		sqlSession.commit();
+	}
+
+	@Override
+	public QueryResult<Specification> query(QueryParam queryParam) {
+		int count = specificationDao.count();
+		List<Specification> rows = specificationDao.query(queryParam);
+		QueryResult<Specification> queryResult = new QueryResult<>();
+		queryResult.setAllSize(count);
+		queryResult.setData(rows);
+		return queryResult;
 	}
 
 }

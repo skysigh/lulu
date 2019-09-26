@@ -51,7 +51,7 @@
 			},
 			updateTableWhenHandle : function(resultModel) {
 				if (resultModel.code == 202) {
-					getAllBrand();
+					refreshTalbe("brandTable");
 					openOrCloseModal("addBrandModal", false);
 					this.brand = {};
 				} else {
@@ -60,7 +60,7 @@
 			},
 			updateTableWhenDelete : function(resultModel) {
 				if (resultModel.code == 202) {
-					getAllBrand();
+					refreshTalbe("brandTable");
 				} else {
 					showMsgInfo(resultModel.msg);
 				}
@@ -72,8 +72,8 @@
 	
 	function initBrand() {
 		initBrandTable();
-		getAllBrand();
 	}
+	
 
 	function initBrandTable() {
 		$('#brandTable').bootstrapTable({
@@ -85,16 +85,23 @@
 				checkbox : true
 			}, {
 				field : 'id',
-				title : 'ID'
+				title : 'ID',
+				sortable : true
 			}, {
 				field : 'name',
-				title : '品牌'
+				title : '品牌',
+				sortable : true
 			}, {
 				field : 'firstChar',
-				title : '首字母'
+				title : '首字母',
+				sortable : true
 			} ],
+			url : "../../brand/queryBrand.do",
+			pageNumber : 1,
+			pageSize : 5,
+			pageList : [ 5, 30, 50, 100, 'All' ],
 			pagination : true,
-			sidePagination : "client",
+			sidePagination : "server",
 			toolbar : '#brandTool',
 			toolbarAlign : 'left',
 			striped : !0,
@@ -103,20 +110,19 @@
 			sortOrder : "asc",
 			search : true,
 			cardView : false,// 是否显示详细视图
-			showColumns : true
-		// 是否显示所有的列
+			showColumns : true,
+			queryParams : function(params) {
+				return params;
+			},
+			responseHandler : function(res) {
+				var data = res.data.data;
+				var allSize = res.data.allSize;
+				return {
+					total : allSize,
+					rows : data
+				};
+			}
 		});
-	}
-
-	function getAllBrand() {
-		sendAjax("../../brand/getAllBrand.do", true, {}, setBrandList)
-	}
-
-	function setBrandList(resultModel) {
-
-		if (resultModel.data) {
-			setTableData("brandTable", resultModel.data);
-		}
 	}
 	
 	initBrand();

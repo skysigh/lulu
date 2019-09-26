@@ -10,7 +10,8 @@
 		getSpeOptionUrl : "../../specification/getSpeOption.do",
 		tableId : "specification_table",
 		modalId : "specification_addModal",
-		tableToolId : "specification_tool"
+		tableToolId : "specification_tool",
+		queryUrl : "../../specification/querySpecification.do"
 	}
 
 	var specificationVm = new Vue({
@@ -67,7 +68,7 @@
 			},
 			updateTableWhenHandle : function(resultModel) {
 				if (resultModel.code == 202) {
-					getAll();
+					this.refreshTalbe();
 					openOrCloseModal(commonObj.modalId, false);
 					this.clearInfo();
 				} else {
@@ -76,7 +77,7 @@
 			},
 			updateTableWhenDelete : function(resultModel) {
 				if (resultModel.code == 202) {
-					getAll();
+					this.refreshTalbe();
 				} else {
 					showMsgInfo(resultModel.msg);
 				}
@@ -121,7 +122,7 @@
 					specOptions : this.speOptionList
 				}
 				var data = {
-						specVoStr: JSON.stringify(obj)
+					specVoStr : JSON.stringify(obj)
 				}
 				return data;
 			},
@@ -133,6 +134,9 @@
 					}
 				}
 				return true;
+			},
+			refreshTalbe: function() {
+				$("#" + commonObj.tableId).bootstrapTable("refresh");
 			}
 		},
 		created : function() {
@@ -141,7 +145,6 @@
 
 	function init() {
 		initTable();
-		getAll();
 	}
 
 	function initTable() {
@@ -154,13 +157,19 @@
 				checkbox : true
 			}, {
 				field : 'id',
-				title : '规格ID'
+				title : '规格ID',
+				sortable : true
 			}, {
 				field : 'specName',
-				title : '规格名称'
+				title : '规格名称',
+				sortable : true
 			} ],
+			url : commonObj.queryUrl,
+			pageNumber : 1,
+			pageSize : 5,
+			pageList : [ 5, 30, 50, 100, 'All' ],
 			pagination : true,
-			sidePagination : "client",
+			sidePagination : "server",
 			toolbar : '#' + commonObj.tableToolId,
 			toolbarAlign : 'left',
 			striped : !0,
@@ -169,19 +178,20 @@
 			sortOrder : "asc",
 			search : true,
 			cardView : false,// 是否显示详细视图
-			showColumns : true
+			showColumns : true,
+			queryParams : function(params) {
+				return params;
+			},
+			responseHandler : function(res) {
+				var data = res.data.data;
+				var allSize = res.data.allSize;
+				return {
+					total : allSize,
+					rows : data
+				};
+			},
 		// 是否显示所有的列
 		});
-	}
-
-	function getAll() {
-		sendAjax(commonObj.getAllUrl, true, {}, setTableList)
-	}
-
-	function setTableList(resultModel) {
-		if (resultModel.data) {
-			setTableData(commonObj.tableId, resultModel.data);
-		}
 	}
 
 	init();

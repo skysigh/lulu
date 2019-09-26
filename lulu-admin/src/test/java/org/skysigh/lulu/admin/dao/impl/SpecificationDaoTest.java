@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.skysigh.lulu.admin.dao.SpecificationDao;
 import org.skysigh.lulu.admin.po.Specification;
+import org.skysigh.lulu.admin.result.QueryParam;
 
 public class SpecificationDaoTest {
 	private SpecificationDao specificationDao;
@@ -26,9 +27,22 @@ public class SpecificationDaoTest {
 		session = factory.openSession();
 		specificationDao = session.getMapper(SpecificationDao.class);
 	}
+
 	@Test
 	public void getAll_test() throws IOException {
 		List<Specification> all = specificationDao.getAll();
 		System.out.println(all);
+	}
+
+	@Test
+	public void count_test() throws IOException {
+		specificationDao.count();
+	}
+
+	@Test
+	public void query_test() throws IOException {
+		QueryParam queryParam = new QueryParam("1", "spec_name", "desc", 0, 10);
+		List<Specification> query = specificationDao.query(queryParam);
+		query.forEach(k -> System.err.println(k));
 	}
 }

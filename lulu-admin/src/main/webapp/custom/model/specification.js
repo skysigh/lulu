@@ -35,7 +35,7 @@
 			},
 			specification_addOrEdit : function() {
 				var url = commonObj.addUrl;
-				if (this.addOrEditBrandTitle != brandObj.addTitle) {
+				if (this.specification_addOrEditTitle != commonObj.addTitle) {
 					url = commonObj.eidtUrl;
 				}
 				sendAjax(url, true, this.specification, this.updateTableWhenHandle);
@@ -59,14 +59,14 @@
 				if (resultModel.code == 202) {
 					getAll();
 					openOrCloseModal(commonObj.modalId, false);
-					this.brand = {};
+					this.specification = {};
 				} else {
 					showMsgInfo(resultModel.msg);
 				}
 			},
 			updateTableWhenDelete : function(resultModel) {
 				if (resultModel.code == 202) {
-					getAllBrand();
+					getAll();
 				} else {
 					showMsgInfo(resultModel.msg);
 				}

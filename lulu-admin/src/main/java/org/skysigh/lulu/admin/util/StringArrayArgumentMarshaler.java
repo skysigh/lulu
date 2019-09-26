@@ -6,7 +6,7 @@ import org.skysigh.lulu.admin.exception.ArgsException;
 
 public class StringArrayArgumentMarshaler implements ArgumentMarshaler {
 	
-	private String[] stringArrayValue;
+	//private String[] stringArrayValue;
 	
 	@Override
 	public void set(ListIterator<String> currentArgument) throws ArgsException {

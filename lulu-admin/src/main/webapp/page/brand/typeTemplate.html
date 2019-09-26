@@ -2,10 +2,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>规格管理</title>
+<title>模板管理</title>
 
 <link rel="stylesheet" type="text/css"
 	href="../../plugin/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="../../plugin/bootstrap/css/bootstrap-select.min.css" />
 <link rel="stylesheet"
 	href="../../plugin/bootstrap/css/bootstrap-tree-view.css" />
 <link rel="stylesheet"
@@ -17,22 +19,22 @@
 	crossorigin="anonymous">
 </head>
 <body>
-	<div id="specification_app">
-		<div id="specification_tool">
+	<div id="typeTemplate_app">
+		<div id="typeTemplate_tool">
 			<div class="btn-group" role="group" aria-label="...">
 				<button type="button" class="btn btn-default"
-					@click="specification_openAddModal()">添加</button>
+					@click="typeTemplate_openAddModal()">添加</button>
 				<button type="button" class="btn btn-default"
-					@click="specification_openEditModal()">编辑</button>
+					@click="typeTemplate_openEditModal()">编辑</button>
 				<button type="button" class="btn btn-default"
-					@click="specification_delete()">删除</button>
+					@click="typeTemplate_delete()">删除</button>
 			</div>
 		</div>
-		<table id="specification_table"></table>
+		<table id="typeTemplate_table"></table>
 
 		<!-- Modal -->
-		<div class="modal fade" id="specification_addModal" tabindex="-1"
-			role="dialog" aria-labelledby="specification_addModal">
+		<div class="modal fade" id="typeTemplate_addModal" tabindex="-1"
+			role="dialog" aria-labelledby="typeTemplate_addModal">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -40,52 +42,65 @@
 							aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						<h4 class="modal-title">{{specification_addOrEditTitle}}</h4>
+						<h4 class="modal-title">{{typeTemplate_addOrEditTitle}}</h4>
 					</div>
 					<div class="modal-body">
-
 						<div class="container-fluid">
 							<div class="row">
-								<label for="specification_name" class="col-md-4">规格名称</label>
+								<input type="hidden" v-model="typeTemplate.id">
+								<label class="col-md-4" for="typeTemplate_name">商品类型</label>
 								<div class="col-md-8">
-									<input id="specification_name" class="form-control">
+									<input class="form-control" id="typeTemplate_name"
+										v-model="typeTemplate.name">
 								</div>
 							</div>
 
 							<div class="row">
-								<button class="btn btn-default">新增规格选项</button>
+								<label class="col-md-4">关联品牌</label>
+								<div class="col-md-8">
+									<select id="brandSel"   class="selectpicker" data-live-search="true" multiple>
+										<option v-for="brand in brandList" :value="toJsonString(brand)">{{brand.text}}</option>
+									</select>
+								</div>
+							</div>
+							
+							<div class="row">
+								<label class="col-md-4">关联规格</label>
+								<div class="col-md-8">
+									<select id="specSel" class="selectpicker" data-live-search="true" multiple>
+										<option v-for="spec in specList" :value="toJsonString(spec)">{{spec.text}}</option>
+									</select>
+								</div>
 							</div>
 
 							<div class="row">
-								<div class="col-md=-12">
+								<label class="col-md-4">扩展属性</label>
+								<div class="col-md-8">
+									<button class="btn btn-deafult" @click="addCustomSpec()">新增扩展属性</button>
 									<table class="table">
 										<thead>
 											<tr>
-												<th>规格选项</th>
-												<th>排序</th>
+												<th>属性名称</th>
 												<th>操作</th>
 											</tr>
 										</thead>
-
 										<tbody>
-											<tr v-for="speOption in speOptionList">
-												<td><input v-model="speOption.speName"></td>
-												<td><input v-model="speOption.orders"></td>
-												<th><button class="btn btn-default" @click="delSpeOption(speOption)"></button></th>
+											<tr v-for="customSpec in customSpecList">
+												<td><input class="form-control" v-model="customSpec.text"></td>
+												<td><button class="btn btn-deafult" @click="deleteCustomSpec(customSpec)">删除</button></td>
 											</tr>
 										</tbody>
+
 									</table>
-
 								</div>
-
 							</div>
-
 						</div>
+
 
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-primary"
-							@click="specification_addOrEdit()">确定</button>
+							@click="typeTemplate_addOrEdit()">确定</button>
 						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 					</div>
 				</div>
@@ -119,7 +134,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<script type="text/javascript" src="../../custom/js/common.js"></script>
 	<script type="text/javascript"
-		src="../../custom/js/page/specification/specification.js"></script>
+		src="../../custom/js/page/brand/typeTemplate.js"></script>
 
 </body>
 </html>

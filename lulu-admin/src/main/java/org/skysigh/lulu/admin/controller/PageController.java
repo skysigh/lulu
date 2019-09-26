@@ -12,18 +12,8 @@ public class PageController extends BaseServlet {
 
 	private static final long serialVersionUID = 4819080878675512459L;
 
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		handleUri(req, resp);
-	}
-
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doGet(req, resp);
-	}
-
 	// ∑÷∑¢«Î«Û
-	private void handleUri(HttpServletRequest request, HttpServletResponse response)
+	protected void handleUri(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String uri = request.getRequestURI();
 		String[] split = uri.split("/");

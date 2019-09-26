@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.Objects;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,24 +18,8 @@ public class UserServlet extends BaseServlet {
 
 	private UserService userService;
 
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		ServletContext servletContext = config.getServletContext();
-		super.init(config);
-	}
-
 	public UserServlet() {
 		userService = new UserServiceImpl(BaseServlet.session);
-	}
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		handleUri(request, response);
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
 	}
 
 	private void getUserById(HttpServletRequest request, HttpServletResponse response)
@@ -69,15 +51,9 @@ public class UserServlet extends BaseServlet {
 	}
 
 	// ∑÷∑¢«Î«Û
-	private void handleUri(HttpServletRequest request, HttpServletResponse response)
+	@Override
+	protected void handleUri(String method, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String uri = request.getRequestURI();
-		String contextPath = request.getContextPath();
-		String servletPath = request.getServletPath();
-		String pathInfo = request.getPathInfo();
-		System.err.println(contextPath +"*" + servletPath +"*"+ pathInfo);
-		String[] split = uri.split("/");
-		String method = split[split.length - 1];
 		if ("getUserById".equals(method)) {
 			getUserById(request, response);
 		} else if ("add".equals(method)) {

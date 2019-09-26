@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.skysigh.lulu.admin.dao.BrandDao;
 import org.skysigh.lulu.admin.po.Brand;
+import org.skysigh.lulu.admin.result.QueryParam;
+import org.skysigh.lulu.admin.result.QueryResult;
 import org.skysigh.lulu.admin.service.BrandService;
 
 public class BrandServiceImpl implements BrandService {
@@ -43,6 +45,16 @@ public class BrandServiceImpl implements BrandService {
 	public void deleteBrand(long[] ids) {
 		brandDao.deleteBrand(ids);
 		sqlSession.commit();
+	}
+
+	@Override
+	public QueryResult<Brand> query(QueryParam queryParam) {
+		int count = brandDao.count();
+		List<Brand> rows = brandDao.query(queryParam);
+		QueryResult<Brand> queryResult = new QueryResult<>();
+		queryResult.setAllSize(count);
+		queryResult.setData(rows);
+		return queryResult;
 	}
 
 }
